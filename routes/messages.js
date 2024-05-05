@@ -2,6 +2,8 @@ const express = require("express");
 const Message = require("../models/message");
 const router = express.Router();
 const ExpressError = require("../expressError");
+const { ensureLoggedIn, ensureCorrectUser } = require("../middleware/auth");
+
 /** GET /:id - get detail of message.
  *
  * => {message: {id,
@@ -14,7 +16,7 @@ const ExpressError = require("../expressError");
  * Make sure that the currently-logged-in users is either the to or from user.
  *
  **/
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", ensureCorrectUser, async (req, res, next) => {
   try {
     const results = await Message.get(req.params.id);
     return res.json(results);
@@ -28,7 +30,7 @@ router.get("/:id", async (req, res, next) => {
  *   {message: {id, from_username, to_username, body, sent_at}}
  *
  **/
-router.post("/", async (req, res, next) => {
+router.post("/", ensureLoggedIn, async (req, res, next) => {
   try {
     const { from_username, to_username, body } = req.body;
     const results = await Message.create({ from_username, to_username, body });
@@ -45,7 +47,7 @@ router.post("/", async (req, res, next) => {
  * Make sure that the only the intended recipient can mark as read.
  *
  **/
-router.post("/:id/read", async (req, res, next) => {
+router.post("/:id/read", ensureCorrectUser, async (req, res, next) => {
   try {
     const id = req.params.id;
     const results = await Message.markRead(id);
