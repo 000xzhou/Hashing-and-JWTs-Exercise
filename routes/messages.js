@@ -28,6 +28,15 @@ router.get("/:id", async (req, res, next) => {
  *   {message: {id, from_username, to_username, body, sent_at}}
  *
  **/
+router.post("/", async (req, res, next) => {
+  try {
+    const { from_username, to_username, body } = req.body;
+    const results = await Message.create({ from_username, to_username, body });
+    return res.json(results);
+  } catch (err) {
+    return next(err);
+  }
+});
 
 /** POST/:id/read - mark message as read:
  *
@@ -36,4 +45,14 @@ router.get("/:id", async (req, res, next) => {
  * Make sure that the only the intended recipient can mark as read.
  *
  **/
+router.post("/:id/read", async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const results = await Message.markRead(id);
+    return res.json(results);
+  } catch (err) {
+    return next(err);
+  }
+});
+
 module.exports = router;
