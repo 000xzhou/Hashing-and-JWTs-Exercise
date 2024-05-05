@@ -9,7 +9,7 @@ class User {
    *    {username, password, first_name, last_name, phone}
    */
 
-  static async register(username, password, first_name, last_name, phone) {
+  static async register({ username, password, first_name, last_name, phone }) {
     const hashedPassword = await bcrypt.hash(
       password,
       Number(process.env.BCRYPT_WORK_FACTOR)
