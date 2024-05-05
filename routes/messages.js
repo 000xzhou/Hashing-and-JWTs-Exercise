@@ -19,7 +19,7 @@ const { ensureLoggedIn, ensureCorrectUser } = require("../middleware/auth");
 router.get("/:id", ensureCorrectUser, async (req, res, next) => {
   try {
     const results = await Message.get(req.params.id);
-    return res.json(results);
+    return res.json({ message: results });
   } catch (err) {
     return next(err);
   }
@@ -34,7 +34,7 @@ router.post("/", ensureLoggedIn, async (req, res, next) => {
   try {
     const { from_username, to_username, body } = req.body;
     const results = await Message.create({ from_username, to_username, body });
-    return res.json(results);
+    return res.json({ message: results });
   } catch (err) {
     return next(err);
   }
@@ -51,7 +51,7 @@ router.post("/:id/read", ensureCorrectUser, async (req, res, next) => {
   try {
     const id = req.params.id;
     const results = await Message.markRead(id);
-    return res.json(results);
+    return res.json({ message: results });
   } catch (err) {
     return next(err);
   }
