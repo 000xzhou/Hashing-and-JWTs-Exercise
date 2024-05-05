@@ -20,3 +20,17 @@ CREATE TABLE messages (
     sent_at timestamp with time zone NOT NULL,
     read_at timestamp with time zone
 );
+
+-- Insert fake records into the users table
+INSERT INTO users (username, password, first_name, last_name, phone, join_at)
+VALUES 
+  ('user1', 'password1', 'John', 'Doe', '+1234567890', NOW()),
+  ('user2', 'password2', 'Jane', 'Smith', '+1987654321', NOW()),
+  ('user3', 'password3', 'Alice', 'Johnson', '+1555555555', NOW());
+
+-- Insert fake records into the messages table
+INSERT INTO messages (from_username, to_username, body, sent_at)
+VALUES 
+  ('user1', 'user2', 'Hello, how are you?', NOW()),
+  ('user2', 'user1', 'Im doing well, thank you!', NOW()),
+  ('user3', 'user1', 'Hey there!', NOW());

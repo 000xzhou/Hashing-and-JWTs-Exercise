@@ -9,7 +9,7 @@ class User {
    *    {username, password, first_name, last_name, phone}
    */
 
-  static async register({ username, password, first_name, last_name, phone }) {
+  static async register(username, password, first_name, last_name, phone) {
     const hashedPassword = await bcrypt.hash(
       password,
       Number(process.env.BCRYPT_WORK_FACTOR)
@@ -44,9 +44,11 @@ class User {
       if ((await bcrypt.compare(password, userResult.password)) === true) {
         let token = jwt.sign({ username }, process.env.SECRET_KEY);
         return { token };
+      } else {
+        throw new ExpressError("Invalid password", 400);
       }
     } else {
-      throw new ExpressError("Invalid user/password", 400);
+      throw new ExpressError("Invalid user", 400);
     }
   }
 
