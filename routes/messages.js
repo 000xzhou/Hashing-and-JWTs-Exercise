@@ -16,7 +16,7 @@ const { ensureLoggedIn, ensureCorrectUser } = require("../middleware/auth");
  * Make sure that the currently-logged-in users is either the to or from user.
  *
  **/
-router.get("/:id", ensureCorrectUser, async (req, res, next) => {
+router.get("/:id", ensureLoggedIn, async (req, res, next) => {
   try {
     const results = await Message.get(req.params.id);
     return res.json({ message: results });
@@ -47,7 +47,7 @@ router.post("/", ensureLoggedIn, async (req, res, next) => {
  * Make sure that the only the intended recipient can mark as read.
  *
  **/
-router.post("/:id/read", ensureCorrectUser, async (req, res, next) => {
+router.post("/:id/read", ensureLoggedIn, async (req, res, next) => {
   try {
     const id = req.params.id;
     const results = await Message.markRead(id);
